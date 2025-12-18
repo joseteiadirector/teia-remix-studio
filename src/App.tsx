@@ -10,6 +10,7 @@ import UrlAnalysis from "./pages/UrlAnalysis";
 import Auth from "./pages/Auth";
 import Brands from "./pages/Brands";
 import LLMMentions from "./pages/LLMMentions";
+import IGODashboard from "./pages/IGODashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/url-analysis" element={<UrlAnalysis />} />
               <Route path="/brands" element={<Brands />} />
               <Route path="/llm-mentions" element={<LLMMentions />} />
+              <Route path="/igo-dashboard" element={<IGODashboard />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
