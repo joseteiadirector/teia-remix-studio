@@ -49,20 +49,28 @@ export default function IGODashboard() {
   const [calculating, setCalculating] = useState(false);
 
   const fetchBrands = async () => {
-    if (!user) return;
-    
-    const { data, error } = await supabase
-      .from("brands")
-      .select("id, name")
-      .order("name");
-
-    if (!error && data) {
-      setBrands(data);
-      if (data.length > 0 && !selectedBrand) {
-        setSelectedBrand(data[0].id);
-      }
+    if (!user) {
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+    
+    try {
+      const { data, error } = await supabase
+        .from("brands")
+        .select("id, name")
+        .order("name");
+
+      if (!error && data) {
+        setBrands(data);
+        if (data.length > 0 && !selectedBrand) {
+          setSelectedBrand(data[0].id);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchMetrics = async () => {
