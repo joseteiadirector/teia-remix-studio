@@ -8,3 +8,9 @@ verify_jwt = true
 
 [functions.calculate-geo-metrics]
 verify_jwt = true
+
+[functions.nucleus-chat]
+verify_jwt = true
+
+[functions.generate-manual-report]
+verify_jwt = true
