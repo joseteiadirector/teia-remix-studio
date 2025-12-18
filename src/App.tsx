@@ -11,6 +11,10 @@ import Auth from "./pages/Auth";
 import Brands from "./pages/Brands";
 import LLMMentions from "./pages/LLMMentions";
 import IGODashboard from "./pages/IGODashboard";
+import NucleusCommandCenter from "./pages/NucleusCommandCenter";
+import Alerts from "./pages/Alerts";
+import Reports from "./pages/Reports";
+import BrandComparison from "./pages/BrandComparison";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +34,10 @@ const App = () => (
               <Route path="/brands" element={<Brands />} />
               <Route path="/llm-mentions" element={<LLMMentions />} />
               <Route path="/igo-dashboard" element={<IGODashboard />} />
+              <Route path="/nucleus-center" element={<NucleusCommandCenter />} />
+              <Route path="/alerts" element={<Alerts />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/comparison" element={<BrandComparison />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
