@@ -27,9 +27,9 @@ import { cn } from "@/lib/utils";
 
 const mainNavItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Marcas", url: "/brands", icon: Globe },
   { title: "Análise de URL", url: "/url-analysis", icon: LinkIcon },
   { title: "Menções LLM", url: "/llm-mentions", icon: Bot },
-  { title: "SEO Metrics", url: "/seo-metrics", icon: Search },
 ];
 
 const insightsNavItems = [

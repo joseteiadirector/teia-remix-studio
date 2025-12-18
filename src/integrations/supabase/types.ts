@@ -14,6 +14,245 @@ export type Database = {
   }
   public: {
     Tables: {
+      brands: {
+        Row: {
+          competitors: string[] | null
+          created_at: string
+          description: string | null
+          domain: string | null
+          id: string
+          keywords: string[] | null
+          logo_url: string | null
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          competitors?: string[] | null
+          created_at?: string
+          description?: string | null
+          domain?: string | null
+          id?: string
+          keywords?: string[] | null
+          logo_url?: string | null
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          competitors?: string[] | null
+          created_at?: string
+          description?: string | null
+          domain?: string | null
+          id?: string
+          keywords?: string[] | null
+          logo_url?: string | null
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      geo_pillars_monthly: {
+        Row: {
+          authority: number | null
+          brand_id: string
+          consistency: number | null
+          created_at: string
+          id: string
+          month: string
+          sentiment: number | null
+          visibility: number | null
+        }
+        Insert: {
+          authority?: number | null
+          brand_id: string
+          consistency?: number | null
+          created_at?: string
+          id?: string
+          month: string
+          sentiment?: number | null
+          visibility?: number | null
+        }
+        Update: {
+          authority?: number | null
+          brand_id?: string
+          consistency?: number | null
+          created_at?: string
+          id?: string
+          month?: string
+          sentiment?: number | null
+          visibility?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "geo_pillars_monthly_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      geo_scores: {
+        Row: {
+          brand_id: string
+          breakdown: Json | null
+          calculated_at: string
+          cpi: number | null
+          created_at: string
+          id: string
+          score: number
+        }
+        Insert: {
+          brand_id: string
+          breakdown?: Json | null
+          calculated_at?: string
+          cpi?: number | null
+          created_at?: string
+          id?: string
+          score?: number
+        }
+        Update: {
+          brand_id?: string
+          breakdown?: Json | null
+          calculated_at?: string
+          cpi?: number | null
+          created_at?: string
+          id?: string
+          score?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "geo_scores_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      igo_metrics_history: {
+        Row: {
+          brand_id: string
+          cpi: number | null
+          created_at: string
+          gap: number | null
+          ice: number | null
+          id: string
+          recorded_at: string
+          stability: number | null
+        }
+        Insert: {
+          brand_id: string
+          cpi?: number | null
+          created_at?: string
+          gap?: number | null
+          ice?: number | null
+          id?: string
+          recorded_at?: string
+          stability?: number | null
+        }
+        Update: {
+          brand_id?: string
+          cpi?: number | null
+          created_at?: string
+          gap?: number | null
+          ice?: number | null
+          id?: string
+          recorded_at?: string
+          stability?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "igo_metrics_history_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentions_llm: {
+        Row: {
+          answer_excerpt: string | null
+          brand_id: string
+          collected_at: string
+          competitors_mentioned: string[] | null
+          confidence: number | null
+          created_at: string
+          full_response: string | null
+          id: string
+          mentioned: boolean
+          position: number | null
+          provider: string
+          query: string
+        }
+        Insert: {
+          answer_excerpt?: string | null
+          brand_id: string
+          collected_at?: string
+          competitors_mentioned?: string[] | null
+          confidence?: number | null
+          created_at?: string
+          full_response?: string | null
+          id?: string
+          mentioned?: boolean
+          position?: number | null
+          provider: string
+          query: string
+        }
+        Update: {
+          answer_excerpt?: string | null
+          brand_id?: string
+          collected_at?: string
+          competitors_mentioned?: string[] | null
+          confidence?: number | null
+          created_at?: string
+          full_response?: string | null
+          id?: string
+          mentioned?: boolean
+          position?: number | null
+          provider?: string
+          query?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentions_llm_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       url_analyses: {
         Row: {
           checklist: Json | null
@@ -47,15 +286,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -182,6 +448,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
