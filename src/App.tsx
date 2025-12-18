@@ -12,6 +12,7 @@ import Brands from "./pages/Brands";
 import LLMMentions from "./pages/LLMMentions";
 import IGODashboard from "./pages/IGODashboard";
 import GeoScore from "./pages/GeoScore";
+import SeoScore from "./pages/SeoScore";
 import NucleusCommandCenter from "./pages/NucleusCommandCenter";
 import Alerts from "./pages/Alerts";
 import Reports from "./pages/Reports";
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/llm-mentions" element={<LLMMentions />} />
               <Route path="/igo-dashboard" element={<IGODashboard />} />
               <Route path="/geo-score" element={<GeoScore />} />
+              <Route path="/seo-score" element={<SeoScore />} />
               <Route path="/nucleus-center" element={<NucleusCommandCenter />} />
               <Route path="/alerts" element={<Alerts />} />
               <Route path="/reports" element={<Reports />} />
