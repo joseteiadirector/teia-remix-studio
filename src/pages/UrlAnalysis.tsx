@@ -7,18 +7,21 @@ import { ScoreRing } from "@/components/url-analysis/ScoreRing";
 import { ChecklistItem } from "@/components/url-analysis/ChecklistItem";
 import { Search, Loader2, Globe, Bot, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+interface ChecklistItemData {
+  title: string;
+  description: string;
+  status: "pass" | "fail" | "warning";
+  category: string;
+}
 
 interface AnalysisResult {
   url: string;
-  seoScore: number;
-  geoScore: number;
-  checklist: {
-    title: string;
-    description: string;
-    status: "pass" | "fail" | "warning";
-    category: string;
-  }[];
-  analyzedAt: string;
+  seo_score: number;
+  geo_score: number;
+  checklist: ChecklistItemData[];
+  analyzed_at: string;
 }
 
 export default function UrlAnalysis() {
@@ -41,79 +44,44 @@ export default function UrlAnalysis() {
     }
 
     setIsAnalyzing(true);
+    setResult(null);
 
-    // Simulated analysis for now - will be replaced with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const { data, error } = await supabase.functions.invoke("analyze-url", {
+        body: { url },
+      });
 
-    // Mock result
-    setResult({
-      url: url.startsWith("http") ? url : `https://${url}`,
-      seoScore: Math.floor(Math.random() * 30) + 65,
-      geoScore: Math.floor(Math.random() * 40) + 45,
-      checklist: [
-        {
-          title: "Meta Title",
-          description: "Título encontrado e com tamanho adequado (55 caracteres)",
-          status: "pass",
-          category: "SEO",
-        },
-        {
-          title: "Meta Description",
-          description: "Descrição presente mas pode ser otimizada para incluir mais palavras-chave",
-          status: "warning",
-          category: "SEO",
-        },
-        {
-          title: "Heading Structure",
-          description: "Estrutura H1-H6 bem organizada",
-          status: "pass",
-          category: "SEO",
-        },
-        {
-          title: "Mobile Friendly",
-          description: "Página responsiva e otimizada para mobile",
-          status: "pass",
-          category: "UX",
-        },
-        {
-          title: "Page Speed",
-          description: "LCP acima de 2.5s - considere otimizar imagens",
-          status: "warning",
-          category: "Performance",
-        },
-        {
-          title: "Mencionado no ChatGPT",
-          description: "Marca não aparece nas respostas do ChatGPT para queries relevantes",
-          status: "fail",
-          category: "GEO",
-        },
-        {
-          title: "Mencionado no Claude",
-          description: "Marca citada em 2 de 10 queries testadas",
-          status: "warning",
-          category: "GEO",
-        },
-        {
-          title: "Conteúdo Citável",
-          description: "Conteúdo estruturado com dados e estatísticas que podem ser citados por LLMs",
-          status: "pass",
-          category: "GEO",
-        },
-        {
-          title: "Schema Markup",
-          description: "Schema.org estruturado não encontrado",
-          status: "fail",
-          category: "SEO",
-        },
-      ],
-      analyzedAt: new Date().toISOString(),
-    });
+      if (error) {
+        console.error("Analysis error:", error);
+        toast.error("Erro ao analisar URL. Tente novamente.");
+        return;
+      }
 
-    setIsAnalyzing(false);
-    toast.success("Análise concluída!");
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
+
+      setResult({
+        url: data.url,
+        seo_score: data.seo_score,
+        geo_score: data.geo_score,
+        checklist: data.checklist,
+        analyzed_at: data.analyzed_at,
+      });
+
+      toast.success("Análise concluída!");
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Erro ao analisar URL. Tente novamente.");
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
-  const seoItems = result?.checklist.filter((item) => item.category === "SEO" || item.category === "UX" || item.category === "Performance") || [];
+  const seoItems = result?.checklist.filter(
+    (item) => item.category === "SEO" || item.category === "UX" || item.category === "Performance"
+  ) || [];
   const geoItems = result?.checklist.filter((item) => item.category === "GEO") || [];
 
   return (
@@ -178,7 +146,7 @@ export default function UrlAnalysis() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex justify-center py-6">
-                <ScoreRing score={result.seoScore} label="SEO Score" size="lg" variant="seo" />
+                <ScoreRing score={result.seo_score} label="SEO Score" size="lg" variant="seo" />
               </CardContent>
             </Card>
 
@@ -193,7 +161,7 @@ export default function UrlAnalysis() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex justify-center py-6">
-                <ScoreRing score={result.geoScore} label="GEO Score" size="lg" variant="geo" />
+                <ScoreRing score={result.geo_score} label="GEO Score" size="lg" variant="geo" />
               </CardContent>
             </Card>
           </div>
